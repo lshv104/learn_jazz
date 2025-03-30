@@ -1,58 +1,247 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>음정 매칭 게임</title>
-    <link rel="stylesheet" href="main.css">
-    <link href="https://fonts.googleapis.com/css2?family=42dot+Sans&display=swap" rel="stylesheet">
-</head>
-<body>
-    <h2 id="menu-title">난이도 및 입력 모드 선택</h2>
+const params = new URLSearchParams(window.location.search);
+const input = params.get('input');
+const q_mode = params.get('scale');
+const questionBox = document.getElementById('question-box');
+var questionText = '';
+var correct_answer = 0;
+const note = ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
+const affix = ["가", "의"];
 
-    <div id="menu-frame">
-        <!-- 난이도 선택 버튼 -->
-        <button class="menu-button" id="easy-button">쉬움 (7초)</button><br>
-        <button class="menu-button" id="medium-button">보통 (4초)</button><br>
-        <button class="menu-button" id="hard-button">어려움 (2초)</button><br>
+// 카운트 다운
+function showCountdownAndQuestion() {
+    const countdown = [4, 3, 2, 1];
+    let index = 0;
 
-        <!-- 입력 모드 토글 -->
-        <div class="toggle-container">
-            <span class="mode-labels">음이름</span>
-            <label class="toggle-switch">
-                <input type="checkbox" id="mode-toggle">
-                <span class="slider"></span>
-            </label>
-            <span class="mode-labels">피아노</span>
-        </div><br>
-
-        <!-- 스케일 모드 토글 -->
-        <div class="toggle-container">
-            <span class="mode-labels">메이저</span>
-            <label class="toggle-switch">
-                <input type="checkbox" id="scale-toggle">
-                <span class="slider"></span>
-            </label>
-            <span class="mode-labels">크로메틱</span>
-        </div>
-    </div>
-
-    <script>
-        // 버튼 클릭 시 실행되는 함수
-        function startGame(difficulty) {
-            const inputMode = document.getElementById('mode-toggle').checked ? 'piano' : 'note';
-            const scaleMode = document.getElementById('scale-toggle').checked ? 'chromatic' : 'major';
-    
-            // URL에 쿼리 파라미터로 정보 전달
-            const query = `?difficulty=${difficulty}&input=${inputMode}&scale=${scaleMode}`;
-            window.location.href = `game.html${query}`; // 다음 페이지 경로
+    const timer = setInterval(() => {
+        if (index < countdown.length) {
+            questionBox.textContent = countdown[index];
+            index++;
+        } else {
+            clearInterval(timer);
+            questionGen();
         }
-    
-        // 버튼에 클릭 이벤트 리스너 추가
-        document.getElementById('easy-button').addEventListener('click', () => startGame('easy'));
-        document.getElementById('medium-button').addEventListener('click', () => startGame('medium'));
-        document.getElementById('hard-button').addEventListener('click', () => startGame('hard'));
-    </script>
-    
+    }, 1000);
+}
 
-</body> 
-</html>
+//랜덤 문제 생성
+function questionGen() {
+    questionText = '문제: ';
+    q_note = Math.floor(Math.random() * 12);
+    q_affix = Math.floor(Math.random() * 2);
+    if (q_mode == 'major') {
+        const interval = ["1도", "2도", "3도", "4도", "5도", "6도", "7도"];
+        q_interval = Math.floor(Math.random() * 7);
+        if (q_affix == 1) {
+            switch (q_interval) {
+                case 0:
+                    correct_answer = (q_note + 0) % 12;
+                    break;
+                case 1:
+                    correct_answer = (q_note + 2) % 12;
+                    break;
+                case 2:
+                    correct_answer = (q_note + 4) % 12;
+                    break;
+                case 3:
+                    correct_answer = (q_note + 5) % 12;
+                    break;
+                case 4:
+                    correct_answer = (q_note + 7) % 12;
+                    break;
+                case 5:
+                    correct_answer = (q_note + 9) % 12;
+                    break;
+                case 6:
+                    correct_answer = (q_note + 11) % 12;
+                    break;
+            }
+        }
+        else if (q_affix == 0) {
+            switch (q_interval) {
+                case 0:
+                    correct_answer = (q_note - 0 + 12) % 12;
+                    break;
+                case 1:
+                    correct_answer = (q_note - 2 + 12) % 12;
+                    break;
+                case 2:
+                    correct_answer = (q_note - 4 + 12) % 12;
+                    break;
+                case 3:
+                    correct_answer = (q_note - 5 + 12) % 12;
+                    break;
+                case 4:
+                    correct_answer = (q_note - 7 + 12) % 12;
+                    break;
+                case 5:
+                    correct_answer = (q_note - 9 + 12) % 12;
+                    break;
+                case 6:
+                    correct_answer = (q_note - 11 + 12) % 12;
+                    break;
+            }
+        }
+        questionText = questionText + note[q_note] + affix[q_affix] + " " + interval[q_interval];
+        questionBox.textContent = questionText;
+    }
+    else {
+        const interval = ["완전1도", "단2도", "장2도", "단3도", "장3도", "감4도", "완전4도", "증4도", "감5도", "완전5도", "증5도", "단6도", "장6도", "단7도", "장7도"];
+        q_interval = Math.floor(Math.random() * 15);
+        if (q_affix == 1) {
+            switch (q_interval) {
+                case 0:
+                    correct_answer = (q_note + 0) % 12;
+                    break;
+                case 1:
+                    correct_answer = (q_note + 1) % 12;
+                    break;
+                case 2:
+                    correct_answer = (q_note + 2) % 12;
+                    break;
+                case 3:
+                    correct_answer = (q_note + 3) % 12;
+                    break;
+                case 4:
+                    correct_answer = (q_note + 4) % 12;
+                    break;
+                case 5:
+                    correct_answer = (q_note + 4) % 12;
+                    break;
+                case 6:
+                    correct_answer = (q_note + 5) % 12;
+                    break;
+                case 7:
+                    correct_answer = (q_note + 6) % 12;
+                    break;
+                case 8:
+                    correct_answer = (q_note + 6) % 12;
+                    break;
+                case 9:
+                    correct_answer = (q_note + 7) % 12;
+                    break;
+                case 10:
+                    correct_answer = (q_note + 8) % 12;
+                    break;
+                case 11:
+                    correct_answer = (q_note + 8) % 12;
+                    break;
+                case 12:
+                    correct_answer = (q_note + 9) % 12;
+                    break;
+                case 13:
+                    correct_answer = (q_note + 10) % 12;
+                    break;
+                case 14:
+                    correct_answer = (q_note + 11) % 12;
+                    break;    
+            }
+        }
+        else {
+            switch (q_interval) {
+                case 0:
+                    correct_answer = (q_note - 0 + 12) % 12;
+                    break;
+                case 1:
+                    correct_answer = (q_note - 1 + 12) % 12;
+                    break;
+                case 2:
+                    correct_answer = (q_note - 2 + 12) % 12;
+                    break;
+                case 3:
+                    correct_answer = (q_note - 3 + 12) % 12;
+                    break;
+                case 4:
+                    correct_answer = (q_note - 4 + 12) % 12;
+                    break;
+                case 5:
+                    correct_answer = (q_note - 4 + 12) % 12;
+                    break;
+                case 6:
+                    correct_answer = (q_note - 5 + 12) % 12;
+                    break;
+                case 7:
+                    correct_answer = (q_note - 6 + 12) % 12;
+                    break;
+                case 8:
+                    correct_answer = (q_note - 6 + 12) % 12;
+                    break;
+                case 9:
+                    correct_answer = (q_note - 7 + 12) % 12;
+                    break;
+                case 10:
+                    correct_answer = (q_note - 8 + 12) % 12;
+                    break;
+                case 11:
+                    correct_answer = (q_note - 8 + 12) % 12;
+                    break;
+                case 12:
+                    correct_answer = (q_note - 9 + 12) % 12;
+                    break;
+                case 13:
+                    correct_answer = (q_note - 10 + 12) % 12;
+                    break;
+                case 14:
+                    correct_answer = (q_note - 11 + 12) % 12;
+                    break;    
+            }
+        }
+        questionText = questionText + note[q_note] + affix[q_affix] + " " + interval[q_interval];
+        questionBox.textContent = questionText;
+    }
+}
+
+// 피아노 키보드 로드 함수
+function loadKeyboard() {
+    const whiteKeys = ['0', '2', '4', '5', '7', '9', '11'];
+    const blackKeys = ['1', '3', '', '6', '8', '10', ''];
+    const keyboard = document.getElementById('keyboard');
+
+    for (let i = 0; i < whiteKeys.length; i++) {
+        const key = document.createElement('div');
+        key.className = 'key white';
+        key.dataset.note = whiteKeys[i];
+        keyboard.appendChild(key);
+
+        if (blackKeys[i]) {
+            const blackKey = document.createElement('div');
+            blackKey.className = 'key black';
+            blackKey.dataset.note = blackKeys[i];
+            blackKey.style.left = `${i * 52 + 47}px`;
+            keyboard.appendChild(blackKey);
+        }
+    }
+
+    document.querySelectorAll('.key').forEach(k => {
+        k.addEventListener('click', () => {
+            if (k.dataset.note == correct_answer) {
+                alert(`정답`);
+                questionGen();
+            }
+            else {
+                alert('오답');
+            }
+        });
+    });
+}
+
+// 음이름 버튼 이벤트
+document.querySelectorAll('.note-buttons button').forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (btn.id == correct_answer) {
+            alert(`정답`);
+            questionGen();
+        }
+        else {
+            alert('오답');
+        }
+    });
+});
+
+// 입력 모드에 따라 UI 보이기
+showCountdownAndQuestion();
+if (input === 'note') {
+    document.getElementById('note-input').style.display = 'block';
+} else if (input === 'piano') {
+    loadKeyboard();
+    document.getElementById('keyboard').style.display = 'block';
+}
