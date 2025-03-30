@@ -1,0 +1,84 @@
+/* 기본 설정 */
+body {
+    font-family: '42dot Sans';
+    text-align: center;
+    padding: 20px;
+}
+
+#menu-title {
+    font-size: 30px;
+    font-weight: bold;
+    color: #7e7e7e;
+}
+
+/* 난이도 버튼 */
+.menu-button {
+    margin: 5px;
+    padding: 10px 20px;
+    width: 200px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #7e7e7e;
+    cursor: pointer;
+}
+
+/* 토글 전체 영역 */
+.toggle-container {
+    margin-top: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 토글 스위치 기본틀 */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+}
+
+/* input 숨김 */
+.toggle-switch input {
+    display: none;
+}
+
+/* 슬라이더 껍질 */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    background-color: #ccc;
+    border-radius: 30px;
+    top: 0; left: 0;
+    right: 0; bottom: 0;
+    transition: .4s;
+}
+
+/* 슬라이더 점 */
+.slider::before {
+    content: "";
+    position: absolute;
+    height: 24px;
+    width: 24px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .1s;
+}
+
+/* 체크 상태일 때 배경 및 점 이동 */
+.toggle-switch input:checked + .slider {
+    background-color: #ccc;
+}
+
+.toggle-switch input:checked + .slider::before {
+    transform: translateX(30px);
+}
+
+/* 라벨 텍스트 */
+.mode-labels {
+    color: #252525;
+    font-size: 16px;
+    width: 60px;
+}
